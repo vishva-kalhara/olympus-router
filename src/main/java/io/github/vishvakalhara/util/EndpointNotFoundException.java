@@ -1,12 +1,16 @@
 package io.github.vishvakalhara.util;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
- * Thrown to indicate that a requested endpoint could not be found.
- * This exception typically occurs when attempting to access an API endpoint
- * that doesn't exist or isn't available.
+ * @deprecated This exception is no longer used in the routing workflow.
+ * Use {@link io.github.vishvakalhara.RouterBase#handleEndpointNotFoundException(HttpServletResponse)} to handle
+ * missing endpoint logic directly within the router.
  *
- * @author Wishva Kalhara Chandrasekara
+ * This class was originally used to indicate that no matching route was found,
+ * but has been replaced for better flexibility and control over HTTP error responses.
  */
+@Deprecated
 public class EndpointNotFoundException extends Exception {
 
     /**

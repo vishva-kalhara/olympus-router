@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
  * @see RouteDefinition
  * @see RouteHandler
  */
-public class AppRouter {
+public final class AppRouter {
 
     /**
      * Represents the result of a successful route match, containing the handler and extracted parameters.
