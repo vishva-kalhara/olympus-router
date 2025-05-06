@@ -1,5 +1,6 @@
 package io.github.vishvakalhara.olympus_router.util;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,5 +34,5 @@ public interface RouteHandler {
      * @param resp the HTTP response to be sent back
      * @throws IOException if an I/O error occurs during request handling
      */
-    void route(HttpServletRequest req, HttpServletResponse resp) throws IOException;
+    void route(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException;
 }

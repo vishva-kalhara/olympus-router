@@ -70,8 +70,7 @@ public abstract class RouterBase extends HttpServlet {
      * @throws IOException if an I/O error occurs during request handling
      * @see RouteHandler#route(HttpServletRequest, HttpServletResponse)
      */
-
-    public final void route(HttpMethod method, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public final void route(HttpMethod method, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String path = req.getPathInfo();
         if (path == null) {
             handleEndpointNotFoundException(resp);
