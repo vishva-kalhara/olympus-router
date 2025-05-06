@@ -4,53 +4,24 @@ import io.github.vishvakalhara.util.EndpointNotFoundException;
 import io.github.vishvakalhara.util.HttpMethod;
 import io.github.vishvakalhara.util.RouteHandler;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
 /**
- * An abstract base class for building domain-specific HTTP routers in a servlet-based application.
- * <p>
- * This class simplifies route registration and request dispatching by wrapping the global {@link AppRouter}
- * with domain-aware functionality. It supports URL pattern matching with dynamic path parameters (e.g., {@code "/users/:id"})
- * and injects those parameters into the {@link HttpServletRequest} attributes using the prefix {@code "param_"}.
- * <p>
- * Extend this class to define your own router with custom behavior, including centralized exception handling.
+ * Abstract servlet base class that provides foundational HTTP routing capabilities.
+ * Subclasses must implement route registration while inheriting standardized
+ * request handling, error responses, and lifecycle management.
  *
- * <h3>Key Features:</h3>
- * <ul>
- *     <li>Domain-scoped routing (per subdomain or logical context)</li>
- *     <li>Fluent method chaining for route registration</li>
- *     <li>Dynamic path parameters injected as request attributes</li>
- *     <li>Supports all HTTP methods defined by {@link HttpMethod}</li>
- *     <li>Designed for extendability and custom exception handling</li>
- * </ul>
+ * <p><b>Implementation Note:</b>
+ * Requires init parameter "domain" to be configured in web.xml.
  *
- * <h3>Example Usage:</h3>
- * <pre>{@code
- * public class UserRouter extends RouterBase {
- *
- *     private final UserController controller = new UserController();
- *
- *     public UserRouter() {
- *         super("users");
- *         this.register(HttpMethod.GET, "/all", controller::getAllUsers)
- *             .register(HttpMethod.GET, "/:id", controller::getUserById);
- *     }
- * }
- * }</pre>
- *
- * @author
- *   Wishva Kalhara Chandrasekara
- *
- * @see AppRouter
- * @see RouteHandler
- * @see HttpMethod
- * @see EndpointNotFoundException
+ * @author Wishva Kalhara Chandrasekara
+ * @see HttpServlet
  */
-
-public abstract class RouterBase {
+public abstract class RouterBase extends HttpServlet {
 
     private final String domain;
 
