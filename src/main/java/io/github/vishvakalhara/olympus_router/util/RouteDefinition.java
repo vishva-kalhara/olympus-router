@@ -1,4 +1,4 @@
-package io.github.vishvakalhara.util;
+package io.github.vishvakalhara.olympus_router.util;
 
 import java.util.ArrayList;
 import java.util.List;

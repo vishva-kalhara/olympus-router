@@ -1,10 +1,12 @@
-package io.github.vishvakalhara.util;
+package io.github.vishvakalhara.olympus_router.util;
+
+import io.github.vishvakalhara.olympus_router.RouterBase;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * @deprecated This exception is no longer used in the routing workflow.
- * Use {@link io.github.vishvakalhara.RouterBase#handleEndpointNotFoundException(HttpServletResponse)} to handle
+ * Use {@link RouterBase#handleEndpointNotFoundException(HttpServletResponse)} to handle
  * missing endpoint logic directly within the router.
  *
  * This class was originally used to indicate that no matching route was found,

@@ -1,7 +1,7 @@
-package io.github.vishvakalhara;
+package io.github.vishvakalhara.olympus_router;
 
-import io.github.vishvakalhara.util.HttpMethod;
-import io.github.vishvakalhara.util.RouteHandler;
+import io.github.vishvakalhara.olympus_router.util.HttpMethod;
+import io.github.vishvakalhara.olympus_router.util.RouteHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

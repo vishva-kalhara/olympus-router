@@ -1,9 +1,9 @@
-package io.github.vishvakalhara;
+package io.github.vishvakalhara.olympus_router;
 
-import io.github.vishvakalhara.util.HttpMethod;
-import io.github.vishvakalhara.util.RouteDefinition;
-import io.github.vishvakalhara.util.RouteHandler;
-import io.github.vishvakalhara.util.RouteParams;
+import io.github.vishvakalhara.olympus_router.util.HttpMethod;
+import io.github.vishvakalhara.olympus_router.util.RouteDefinition;
+import io.github.vishvakalhara.olympus_router.util.RouteHandler;
+import io.github.vishvakalhara.olympus_router.util.RouteParams;
 
 import java.util.ArrayList;
 import java.util.List;
