@@ -1,9 +1,9 @@
 package io.github.vishvakalhara;
 
-import io.github.vishvakalhara.util.EndpointNotFoundException;
 import io.github.vishvakalhara.util.HttpMethod;
 import io.github.vishvakalhara.util.RouteHandler;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,6 +88,62 @@ public abstract class RouterBase extends HttpServlet {
             req.setAttribute("param_" + entry.getKey(), entry.getValue());
         }
         result.handler.route(req, resp);
+    }
+
+    /**
+     * Handles HTTP GET requests by routing to registered GET handlers.
+     *
+     * @param req  the HTTP request
+     * @param resp the HTTP response
+     * @throws ServletException if servlet-specific errors occur
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        this.route(HttpMethod.GET, req, resp);
+    }
+
+    /**
+     * Handles HTTP POST requests by routing to registered POST handlers.
+     *
+     * @param req  the HTTP request
+     * @param resp the HTTP response
+     * @throws ServletException if servlet-specific errors occur
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        this.route(HttpMethod.POST, req, resp);
+    }
+
+    /**
+     * Handles HTTP PUT requests by routing to registered PUT handlers.
+     *
+     * @param req  the HTTP request
+     * @param resp the HTTP response
+     * @throws ServletException if servlet-specific errors occur
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        this.route(HttpMethod.PUT, req, resp);
+    }
+
+    /**
+     * Handles HTTP DELETE requests by routing to registered DELETE handlers.
+     *
+     * @param req  the HTTP request
+     * @param resp the HTTP response
+     * @throws ServletException if servlet-specific errors occur
+     * @throws IOException      if an I/O error occurs
+     */
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        this.route(HttpMethod.DELETE, req, resp);
     }
 
     /**
