@@ -99,7 +99,7 @@ public abstract class RouterBase extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected final void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         this.route(HttpMethod.GET, req, resp);
     }
@@ -113,7 +113,7 @@ public abstract class RouterBase extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected final void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         this.route(HttpMethod.POST, req, resp);
     }
@@ -127,7 +127,7 @@ public abstract class RouterBase extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected final void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         this.route(HttpMethod.PUT, req, resp);
     }
@@ -141,7 +141,7 @@ public abstract class RouterBase extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected final void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         this.route(HttpMethod.DELETE, req, resp);
     }
