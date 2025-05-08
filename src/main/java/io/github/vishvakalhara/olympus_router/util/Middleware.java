@@ -5,7 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Deprecated
 public abstract class Middleware {
 
-    public abstract boolean doMiddleware(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException ;
+    public abstract boolean doMiddleware(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException;
 }
