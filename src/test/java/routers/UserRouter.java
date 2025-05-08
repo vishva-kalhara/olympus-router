@@ -19,10 +19,8 @@ public class UserRouter extends Router {
     @Override
     public void init() throws ServletException {
 
-        this.register(HttpMethod.GET, "/users",
-                        ProtectByApiKey.getInstance()::doMiddleware,
-                        userController::getAllUsers
-                )
+        this.use(ProtectByApiKey.getInstance()::doMiddleware)
+                .register(HttpMethod.GET, "/users", userController::getAllUsers)
                 .register(HttpMethod.GET, "/:id", userController::getAllUsers);
     }
 }

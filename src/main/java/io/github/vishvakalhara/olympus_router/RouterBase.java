@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Abstract servlet base class that provides foundational HTTP routing capabilities.
@@ -25,6 +25,8 @@ public abstract class RouterBase extends HttpServlet {
 
     private final String domain;
 
+    private final List<RouteHandler> commonMiddlewares;
+
     /**
      * Creates a new router instance for the specified domain.
      *
@@ -32,6 +34,7 @@ public abstract class RouterBase extends HttpServlet {
      */
     public RouterBase(String domain) {
         this.domain = domain;
+        commonMiddlewares = new ArrayList<>();
     }
 
     /**
@@ -41,17 +44,19 @@ public abstract class RouterBase extends HttpServlet {
      * @param urlPattern the URL pattern with parameters (e.g., "/users/:id")
      * @param middlewares    the function to handle matching requests
      * @return this router instance for method chaining
-     * @see AppRouter#register(String, HttpMethod, String, RouteHandler[])
+     * @see AppRouter#register(String, HttpMethod, String, List)
      *
      * <p><b>Example:</b>
      * <pre>{@code
-     * new Router("api.example.com")
+     * new Router("users")
      *     .register(HttpMethod.GET, "/users", listUsersHandler)
      *     .register(HttpMethod.POST, "/users", createUserHandler);
      * }</pre>
      */
     public final RouterBase register(HttpMethod method, String urlPattern, RouteHandler... middlewares) {
-        AppRouter.getInstance().register(this.domain, method, urlPattern, middlewares);
+        List<RouteHandler> combined = new ArrayList<>(commonMiddlewares);
+        combined.addAll(Arrays.asList(middlewares));
+        AppRouter.getInstance().register(this.domain, method, urlPattern, combined);
         return this;
     }
 
@@ -88,10 +93,30 @@ public abstract class RouterBase extends HttpServlet {
         }
 
         for(RouteHandler middleware : result.middlewares){
-            if (!middleware.route(req, resp)) {
+            if (middleware == null || !middleware.route(req, resp)) {
                 return;
             }
         }
+    }
+
+    /**
+     * Registers one or more global middleware handlers to be executed before any route-specific handlers.
+     * <p>
+     * Middleware added using this method will run for every incoming request handled by this router,
+     * regardless of the HTTP method or path. This is useful for tasks such as authentication, logging,
+     * or request preprocessing that should apply across all routes.
+     *
+     * <p><b>Example:</b>
+     * <pre>{@code
+     * router.use(authMiddleware, loggingMiddleware);
+     * }</pre>
+     *
+     * @param middlewares one or more {@link RouteHandler} instances to be added as global middleware
+     * @return this {@link RouterBase} instance for method chaining
+     */
+    public final RouterBase use(RouteHandler... middlewares) {
+        Collections.addAll(commonMiddlewares, middlewares);
+        return this;
     }
 
     /**

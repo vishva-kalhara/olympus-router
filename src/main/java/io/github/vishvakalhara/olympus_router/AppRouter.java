@@ -32,10 +32,10 @@ public final class AppRouter {
      * Represents the result of a successful route match, containing the handler and extracted parameters.
      */
     public static class RouteMatchResult {
-        public final RouteHandler[] middlewares;
+        public final List<RouteHandler> middlewares;
         public final RouteParams params;
 
-        public RouteMatchResult(RouteHandler[] middlewares, RouteParams params) {
+        public RouteMatchResult(List<RouteHandler> middlewares, RouteParams params) {
             this.middlewares = middlewares;
             this.params = params;
         }
@@ -66,7 +66,7 @@ public final class AppRouter {
      * @param middlewares    the function to handle matching requests
      * @return {@code true} if the route was added successfully
      */
-    public boolean register(String domain, HttpMethod method, String urlPattern, RouteHandler... middlewares) {
+    public boolean register(String domain, HttpMethod method, String urlPattern, List<RouteHandler> middlewares) {
 
         return routeDefinitions.add(new RouteDefinition(domain, method, urlPattern, middlewares));
     }
