@@ -32,11 +32,11 @@ public final class AppRouter {
      * Represents the result of a successful route match, containing the handler and extracted parameters.
      */
     public static class RouteMatchResult {
-        public final RouteHandler handler;
+        public final RouteHandler[] middlewares;
         public final RouteParams params;
 
-        public RouteMatchResult(RouteHandler handler, RouteParams params) {
-            this.handler = handler;
+        public RouteMatchResult(RouteHandler[] middlewares, RouteParams params) {
+            this.middlewares = middlewares;
             this.params = params;
         }
     }
@@ -63,12 +63,12 @@ public final class AppRouter {
      * @param domain     the domain to match (e.g., "api.example.com")
      * @param method     the HTTP method (e.g., GET, POST)
      * @param urlPattern the URL pattern with parameters (e.g., "/users/:id")
-     * @param handler    the function to handle matching requests
+     * @param middlewares    the function to handle matching requests
      * @return {@code true} if the route was added successfully
      */
-    public boolean register(String domain, HttpMethod method, String urlPattern, RouteHandler handler) {
+    public boolean register(String domain, HttpMethod method, String urlPattern, RouteHandler... middlewares) {
 
-        return routeDefinitions.add(new RouteDefinition(domain, method, urlPattern, handler));
+        return routeDefinitions.add(new RouteDefinition(domain, method, urlPattern, middlewares));
     }
 
     /**
@@ -84,7 +84,7 @@ public final class AppRouter {
             if (route.getDomain().equals(domain) && route.getMethod() == method) {
                 Matcher matcher = route.getPattern().matcher(path);
                 if (matcher.matches()) {
-                    return new RouteMatchResult(route.getHandler(), route.extractParams(matcher));
+                    return new RouteMatchResult(route.getMiddlewares(), route.extractParams(matcher));
                 }
             }
         }

@@ -39,9 +39,9 @@ public abstract class RouterBase extends HttpServlet {
      *
      * @param method     the HTTP method (GET, POST, etc.)
      * @param urlPattern the URL pattern with parameters (e.g., "/users/:id")
-     * @param handler    the function to handle matching requests
+     * @param middlewares    the function to handle matching requests
      * @return this router instance for method chaining
-     * @see AppRouter#register(String, HttpMethod, String, RouteHandler)
+     * @see AppRouter#register(String, HttpMethod, String, RouteHandler[])
      *
      * <p><b>Example:</b>
      * <pre>{@code
@@ -50,8 +50,8 @@ public abstract class RouterBase extends HttpServlet {
      *     .register(HttpMethod.POST, "/users", createUserHandler);
      * }</pre>
      */
-    public final RouterBase register(HttpMethod method, String urlPattern, RouteHandler handler) {
-        AppRouter.getInstance().register(this.domain, method, urlPattern, handler);
+    public final RouterBase register(HttpMethod method, String urlPattern, RouteHandler... middlewares) {
+        AppRouter.getInstance().register(this.domain, method, urlPattern, middlewares);
         return this;
     }
 
@@ -86,7 +86,12 @@ public abstract class RouterBase extends HttpServlet {
         for (Map.Entry<String, String> entry : result.params.entrySet()) {
             req.setAttribute("param_" + entry.getKey(), entry.getValue());
         }
-        result.handler.route(req, resp);
+
+        for(RouteHandler middleware : result.middlewares){
+            if (!middleware.route(req, resp)) {
+                return;
+            }
+        }
     }
 
     /**

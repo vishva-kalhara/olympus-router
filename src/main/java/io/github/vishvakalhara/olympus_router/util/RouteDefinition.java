@@ -18,7 +18,7 @@ public class RouteDefinition {
 
     private final HttpMethod method;
 
-    private final RouteHandler handler;
+    private final RouteHandler[] middlewares;
 
     private final Pattern pattern;
 
@@ -31,12 +31,12 @@ public class RouteDefinition {
      * @param domain     the domain for this route (e.g., "api.example.com")
      * @param method     the HTTP method (e.g., GET, POST)
      * @param urlPattern the URL pattern (e.g., "/users/:id") where segments starting with ":" denote parameters
-     * @param handler    the handler that will process requests for this route
+     * @param middlewares    the middlewares that will process requests for this route
      */
-    public RouteDefinition(String domain, HttpMethod method, String urlPattern, RouteHandler handler) {
+    public RouteDefinition(String domain, HttpMethod method, String urlPattern, RouteHandler[] middlewares) {
         this.domain = domain;
         this.method = method;
-        this.handler = handler;
+        this.middlewares = middlewares;
 
         StringBuilder regex = new StringBuilder();
         this.paramNames = new ArrayList<>();
@@ -86,12 +86,12 @@ public class RouteDefinition {
     }
 
     /**
-     * Returns the handler responsible for processing requests for this route.
+     * Returns all the middlewares responsible for processing requests for this route.
      *
-     * @return the route handler
+     * @return the route middlewares
      */
-    public RouteHandler getHandler() {
-        return handler;
+    public RouteHandler[] getMiddlewares() {
+        return middlewares;
     }
 
     /**
