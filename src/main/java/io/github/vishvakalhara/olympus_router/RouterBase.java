@@ -31,8 +31,17 @@ public abstract class RouterBase extends HttpServlet {
      *
      * @param domain the domain to associate with this router (e.g., "api.example.com")
      */
+    @Deprecated
     public RouterBase(String domain) {
         this.domain = domain;
+        commonMiddlewares = new ArrayList<>();
+    }
+
+    /**
+     * Creates a new router instance for the specified domain.
+     */
+    public RouterBase() {
+        this.domain = String.valueOf(System.identityHashCode(this));
         commonMiddlewares = new ArrayList<>();
     }
 
