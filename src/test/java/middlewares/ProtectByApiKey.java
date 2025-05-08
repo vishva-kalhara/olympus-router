@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ProtectByApiKey extends Middleware {
+public class ProtectByApiKey  {
 
     private static final ProtectByApiKey instance = new ProtectByApiKey();
 
@@ -18,8 +18,7 @@ public class ProtectByApiKey extends Middleware {
         return instance;
     }
 
-    @Override
-    public boolean doMiddleware(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public static boolean doMiddleware(HttpServletRequest req, HttpServletResponse resp) {
         return false;
     }
 }

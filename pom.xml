@@ -6,7 +6,7 @@
 
     <groupId>io.github.vishva-kalhara</groupId>
     <artifactId>olympus-router</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.1</version>
 
     <name>Olympus Router</name>
     <description>Provides a lightweight yet powerful routing framework for JEE7+ applications with support for HTTP method-based routing, path parameters (e.g., /users/:id), and clean handler registration using expressive DSL-style syntax.</description>

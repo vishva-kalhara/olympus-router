@@ -15,4 +15,9 @@ public class Router extends RouterBase {
     public void handleEndpointNotFoundException(HttpServletResponse resp) throws IOException {
         resp.getWriter().write("Endpoint not found!");
     }
+
+    @Override
+    public void handleException(Exception e, HttpServletResponse resp) {
+
+    }
 }
