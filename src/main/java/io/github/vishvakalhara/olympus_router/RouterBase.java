@@ -128,6 +128,26 @@ public abstract class RouterBase extends HttpServlet {
     }
 
     /**
+     * Unregisters one or more previously added global middleware handlers.
+     * <p>
+     * Middleware removed using this method will no longer be executed for incoming requests handled by this router.
+     * This is useful for dynamically adjusting middleware behavior, such as disabling authentication or logging
+     * under certain conditions.
+     *
+     * <p><b>Example:</b>
+     * <pre>{@code
+     * router.remove(authMiddleware, loggingMiddleware);
+     * }</pre>
+     *
+     * @param middlewares one or more {@link RouteHandler} instances to be removed from the global middleware chain
+     * @return this {@link RouterBase} instance for method chaining
+     */
+    public final RouterBase remove(RouteHandler... middlewares) {
+        commonMiddlewares.removeAll(Arrays.asList(middlewares));
+        return this;
+    }
+
+    /**
      * Handles HTTP GET requests by routing to registered GET handlers.
      *
      * @param req  the HTTP request
