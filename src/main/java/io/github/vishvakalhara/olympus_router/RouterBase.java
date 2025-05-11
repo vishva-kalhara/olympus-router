@@ -72,8 +72,14 @@ public abstract class RouterBase extends HttpServlet {
     /**
      * Routes an incoming HTTP request to the appropriate handler based on the registered HTTP method and URL pattern.
      * <p>
-     * If the request matches a registered route, the associated handler is invoked. Path parameters (e.g., {@code /users/:id})
-     * are extracted and injected into the {@link HttpServletRequest} as attributes prefixed with {@code "param_"}.
+     * If the request matches a registered route, the associated handlers (including any middlewares) are invoked in order.
+     * <p>
+     * Path parameters (e.g., {@code /users/:id}) are extracted from the URL and injected into the {@link HttpServletRequest}
+     * as attributes prefixed with {@code "param_"} (e.g., {@code param_id}).
+     * <p>
+     * Query parameters (e.g., {@code ?search=term&tags=a&tags=b}) are also extracted and injected as attributes prefixed
+     * with {@code "query_"}. If a query parameter has multiple values, it is stored as a {@link java.util.List}; if it has
+     * only one value, it is stored as a {@link String}.
      * <p>
      * If no matching route is found, the abstract method {@link #handleEndpointNotFoundException(HttpServletResponse)}
      * is invoked to handle the fallback behavior (such as returning a custom 404 error).
@@ -84,27 +90,33 @@ public abstract class RouterBase extends HttpServlet {
      * @see RouteHandler#route(HttpServletRequest, HttpServletResponse)
      */
     public final void route(HttpMethod method, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-            String path = req.getPathInfo();
-            if (path == null) {
-                handleEndpointNotFoundException(resp);
+        String path = req.getPathInfo();
+        if (path == null) {
+            handleEndpointNotFoundException(resp);
+            return;
+        }
+
+        AppRouter.RouteMatchResult result = AppRouter.getInstance().match(domain, method, path);
+        if (result == null) {
+            handleEndpointNotFoundException(resp);
+            return;
+        }
+
+        for (Map.Entry<String, String> entry : result.params.entrySet()) {
+            req.setAttribute("param_" + entry.getKey(), entry.getValue());
+        }
+
+        req.getParameterMap().forEach((key, values) -> {
+            if (values != null && values.length > 0) {
+                req.setAttribute("query_" + key, values.length == 1 ? values[0] : Arrays.asList(values));
+            }
+        });
+
+        for (RouteHandler middleware : result.middlewares) {
+            if (middleware == null || !middleware.route(req, resp)) {
                 return;
             }
-
-            AppRouter.RouteMatchResult result = AppRouter.getInstance().match(domain, method, path);
-            if (result == null) {
-                handleEndpointNotFoundException(resp);
-                return;
-            }
-
-            for (Map.Entry<String, String> entry : result.params.entrySet()) {
-                req.setAttribute("param_" + entry.getKey(), entry.getValue());
-            }
-
-            for (RouteHandler middleware : result.middlewares) {
-                if (middleware == null || !middleware.route(req, resp)) {
-                    return;
-                }
-            }
+        }
     }
 
     /**
@@ -152,7 +164,7 @@ public abstract class RouterBase extends HttpServlet {
      *
      * @param req  the HTTP request
      * @param resp the HTTP response
-     * @throws IOException if an I/O error occurs during request handling
+     * @throws IOException      if an I/O error occurs during request handling
      * @throws ServletException if a ServletException occurs during request handling
      */
     @Override
@@ -166,7 +178,7 @@ public abstract class RouterBase extends HttpServlet {
      *
      * @param req  the HTTP request
      * @param resp the HTTP response
-     * @throws IOException if an I/O error occurs during request handling
+     * @throws IOException      if an I/O error occurs during request handling
      * @throws ServletException if a ServletException occurs during request handling
      */
     @Override
@@ -180,7 +192,7 @@ public abstract class RouterBase extends HttpServlet {
      *
      * @param req  the HTTP request
      * @param resp the HTTP response
-     * @throws IOException if an I/O error occurs during request handling
+     * @throws IOException      if an I/O error occurs during request handling
      * @throws ServletException if a ServletException occurs during request handling
      */
     @Override
@@ -194,7 +206,7 @@ public abstract class RouterBase extends HttpServlet {
      *
      * @param req  the HTTP request
      * @param resp the HTTP response
-     * @throws IOException if an I/O error occurs during request handling
+     * @throws IOException      if an I/O error occurs during request handling
      * @throws ServletException if a ServletException occurs during request handling
      */
     @Override
